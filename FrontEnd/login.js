@@ -1,6 +1,5 @@
-const loginForm = document.getElementById("login");
-loginForm.addEventListener("submit", function(event) {
-    event.preventDefault();
+document.getElementById("login").addEventListener("submit", function(form) {
+    form.preventDefault();
 
     const formData = new FormData(this); 
     const formDataJson = Object.fromEntries(formData.entries()); 
@@ -14,13 +13,10 @@ loginForm.addEventListener("submit", function(event) {
     })
     .then(response => {
         if (response.ok) {
-            return response.json();
+            window.location.href = "index.html";
         } else {
             throw new Error("Échec de la connexion : " + response.statusText);
         }
-    })
-    .then(data => {
-        window.location.href = "index.html";
     })
     .catch(error => {
         console.error("Erreur lors de la connexion :", error);
