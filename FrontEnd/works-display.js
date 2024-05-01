@@ -1,72 +1,68 @@
-let works; 
+let $works;
 
-fetch("works-array.json")
-  .then(response => response.json())
-  .then(data => {  
-    works = data
-    createWorks(works)
-});
+function getWorks() {
+    fetch("http://localhost:5678/api/works")
+        .then(response => response.json())
+        .then(data => {  
+            $works = data;
+            createWorks($works);
+        });
+}
 
-const gallery = document.querySelector('.gallery')
+getWorks();
 
-function generateWorks(works) {
-    const worksArticle = document.createElement("article")
-    const worksImg = document.createElement("img")
-    const worksText = document.createElement("span")
-    worksText.style.display = "block"
-    worksText.style.padding = "7px 0px 0px 0px"
+function categories() {
+    fetch("http://localhost:5678/api/categories")
+        .then(response => response.json())
+        .then(data => {  
+            categories = data;
+            createBtn();
+        });
+}
 
+categories();
 
-    worksImg.src = works.imageUrl
-    worksText.textContent = works.title
-    worksArticle.appendChild(worksImg)
-    worksArticle.appendChild(worksText)
-    gallery.appendChild(worksArticle)
-};
+function createWorks($works) {
+    $gallery.innerHTML = "";
+    for (let i = 0; i < $works.length; i++) {
+        const worksArticle = document.createElement("article");
+        const worksImg = document.createElement("img");
+        const worksText = document.createElement("span");
 
-function createWorks(works) {
-    for (let i = 0; i < works.length; i++) {
-        generateWorks(works[i])
-    }
-};
-
-const btnAll = document.getElementById("btn-all")
-const btnProjects = document.getElementById("btn-projects")
-const btnApartments = document.getElementById("btn-apartments")
-const btnHotels = document.getElementById("btn-hotels")
-
-btnAll.addEventListener("click", function() {
-
-    gallery.innerHTML = ""
-    for (let i = 0; i < works.length; i++) {
-        generateWorks(works[i])
-    }
-
-});
-
-function filterWorksByCategory(categoryName) {
-
-    gallery.innerHTML = ""
-    const filteredWorks = works.filter(works => works.category.name === categoryName)
-
-    for (let i = 0; i < filteredWorks.length; i++) {
-        generateWorks(filteredWorks[i])
+        worksImg.src = $works[i].imageUrl;
+        worksText.textContent = $works[i].title;
+        worksArticle.appendChild(worksImg);
+        worksArticle.appendChild(worksText);
+        $gallery.appendChild(worksArticle);
     }
 }
 
-btnAll.addEventListener("click", function() {
-    gallery.innerHTML = ""
-    createWorks(works)
+
+function createBtn() {
+    for (let i = 0; i < categories.length; i++) {
+        const $containerBtn = document.querySelector('.sort-btn');
+        const $button = document.createElement("button");   
+
+        $containerBtn.appendChild($button);
+        $button.textContent = categories[i].name;
+        $button.addEventListener('click',  function() {
+            filterWorksByCategory(categories[i].name);
+        });
+    }
+}
+
+const $gallery = document.querySelector('.gallery');
+const $btnAll = document.getElementById("btn-all");
+
+$btnAll.addEventListener("click", function() {
+    $gallery.innerHTML = "";
+    createWorks($works);
 });
 
-btnProjects.addEventListener("click", function() {
-    filterWorksByCategory("Objets")
-});
+function filterWorksByCategory(categoryName) {
+    $gallery.innerHTML = "";
+    const $filteredWorks = $works.filter(filterParam => filterParam.category.name === categoryName);
+    createWorks($filteredWorks);
+}
 
-btnApartments.addEventListener("click", function() {
-    filterWorksByCategory("Appartements")
-});
 
-btnHotels.addEventListener("click", function() {
-    filterWorksByCategory("Hotels & restaurants")
-});
