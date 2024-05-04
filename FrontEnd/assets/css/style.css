@@ -194,7 +194,7 @@ height: 37px;
 background-color: white;
 color: #1D6154;
 text-align: center;
-font-family: Syne;
+font-family: 'Syne';
 font-size: 16px;
 font-weight: 700;
 padding: 9px 22px 9px 22px;
@@ -206,6 +206,8 @@ background: #1D6154;
 color: white;
 }
 
+
+/* style pour les boutons de tri */
 .sort-btn {
 	align-items: center;
 	gap: 9px;
@@ -214,6 +216,63 @@ color: white;
 	padding: 0px 0px 20px 0px;
 }
 
+
+
+/* style pour les liens */
 header a {
 	text-decoration: none;
+	color: black;
 }
+
+
+/* style pour le login */
+
+input[type="text"],
+input[type="password"] {
+    width: 30%;
+    padding: 10px;
+    margin-top: 20px;
+	box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.09);
+    box-sizing: border-box;
+
+	font-family: 'Syne';
+
+}
+
+input[type="submit"] {
+	padding: 10px;
+	border-radius: 60px;
+	width: 179px;
+	cursor: pointer;
+}
+
+form {
+display: flex;
+align-items: center;
+flex-direction: column;
+}
+
+.login-form {
+	display: flex;
+}
+
+
+.password-forgot {
+	justify-content: center;
+	display: flex;
+	color: #3D3D3D;
+font-family: "Work Sans";
+text-decoration-line: underline;
+cursor: pointer;
+}
+
+.title-login {
+	color: #1D6154;
+text-align: center;
+font-family: 'Syne';
+font-size: 30px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+

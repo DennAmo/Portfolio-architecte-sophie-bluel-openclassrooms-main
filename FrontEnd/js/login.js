@@ -30,17 +30,18 @@ if (window.location.pathname === "/login.html") {
 }
 
 if (window.location.pathname === "/index.html") {
-    const token = localStorage.getItem('token');
-    if (token) {
-        const logBtn = document.querySelector('.logBtn');
-        if (logBtn) {
-            logBtn.innerText = "logout";
+    const $token = localStorage.getItem('token');
+    if ($token) {
+        const $logBtn = document.querySelector('.logBtn');
+        if ($logBtn) {
+            $logBtn.innerHTML = "logout";
+            $logBtn.style.cursor = "pointer";
         } else {
             console.error("error create btn")
         }
-        logBtn.addEventListener('click', function() {
+        $logBtn.addEventListener('click', function() {
             localStorage.removeItem('token');
-            window.location.href = "index.html";
+            window.location.href = "login.html";
         });
     }
 }

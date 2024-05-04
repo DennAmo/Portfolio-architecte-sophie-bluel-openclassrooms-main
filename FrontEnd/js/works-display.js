@@ -25,15 +25,15 @@ categories();
 function createWorks($works) {
     $gallery.innerHTML = "";
     for (let i = 0; i < $works.length; i++) {
-        const worksArticle = document.createElement("article");
-        const worksImg = document.createElement("img");
-        const worksText = document.createElement("span");
+        const $worksFigure = document.createElement("figure");
+        const $worksImg = document.createElement("img");
+        const $worksText = document.createElement("figcaption");
 
-        worksImg.src = $works[i].imageUrl;
-        worksText.textContent = $works[i].title;
-        worksArticle.appendChild(worksImg);
-        worksArticle.appendChild(worksText);
-        $gallery.appendChild(worksArticle);
+        $worksImg.src = $works[i].imageUrl;
+        $worksText.textContent = $works[i].title;
+        $worksFigure.appendChild($worksImg);
+        $worksFigure.appendChild($worksText);
+        $gallery.appendChild($worksFigure);
     }
 }
 
