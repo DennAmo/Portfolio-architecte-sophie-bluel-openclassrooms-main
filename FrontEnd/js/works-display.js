@@ -1,11 +1,39 @@
 let $works
 let $categories
+const $modall = document.getElementById('modal')
+
+const isTokenPresent = () => {
+    return sessionStorage.getItem('token') ? true : false;
+}
+
+if (isTokenPresent()) {
+    const $logBtn = document.querySelector('.logBtn');
+    const $h2 = document.querySelector("#portfolio h2");
+    const $editBtn = document.createElement("aside");
+
+    $editBtn.classList.add("edit-button");
+    $editBtn.innerHTML = "<i class='fa-regular fa-pen-to-square'></i> Modifier";
+    $h2.insertAdjacentElement('afterend', $editBtn);
+
+    $editBtn.addEventListener('click', function () {
+        $modall.style.display = 'flex';
+    });
+
+    $logBtn.innerHTML = "logout";
+
+
+    $logBtn.addEventListener('click', function () {
+        sessionStorage.clear();
+        window.location.href = "login.html";
+    });
+}
 
 async function getWorks() {
     try {
         const response = await fetch("http://localhost:5678/api/works");
         $works = await response.json();
         createWorks($works);
+        createEditedWorks()
     } catch (error) {
         console.error('Erreur:', error);
     }
