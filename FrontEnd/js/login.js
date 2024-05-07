@@ -8,7 +8,7 @@ if (window.location.pathname === "/login.html") {
         const $formDataJson = Object.fromEntries($formData.entries())
 
         try {
-            const response = await fetch("http://localhost:5678/api/users/login", {
+            const $response = await fetch("http://localhost:5678/api/users/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -16,9 +16,8 @@ if (window.location.pathname === "/login.html") {
                 body: JSON.stringify($formDataJson)
             });
 
-            if (response.ok) {
-                const data = await response.json()
-                localStorage.setItem('token', data.token)
+            if ($response.ok) {
+                localStorage.setItem('token', $response.token)
                 window.location.href = "index.html"
             } else {
                 console.error('connexion error')
@@ -35,7 +34,6 @@ if (window.location.pathname === "/index.html") {
     const $token = localStorage.getItem('token')
 
     if ($token) {
-        
         const $logBtn = document.querySelector('.logBtn')
         const $portfolio = document.querySelector("#portfolio")
         const $h2 = document.querySelector("#portfolio h2")
@@ -50,14 +48,14 @@ if (window.location.pathname === "/index.html") {
         $editedworksBtn.style.display = 'inline-block'
         $editedworksBtn.style.cursor = 'pointer'
 
-        
+
         $editedworksBtn.addEventListener('click', function () {
             document.getElementById('modal').style.display = 'flex'
         });
         document.getElementsByClassName('close')[0].addEventListener('click', function () {
             document.getElementById('modal').style.display = 'none'
         });
-        
+
         $logBtn.innerHTML = "logout"
         $logBtn.style.cursor = "pointer"
 
@@ -65,22 +63,22 @@ if (window.location.pathname === "/index.html") {
             localStorage.removeItem('token')
             window.location.href = "login.html"
         });
-        
+
     }
-    
+
     const $modallContent = document.querySelector(".modal-content")
     function createEditedWorks() {
         for (let i = 0; i < $works.length; i++) {
-           
+
             const $editedworksFigure = document.createElement("div");
             const $editedworksImg = document.createElement("img");
-            
+
             $editedworksImg.src = $works[i].imageUrl;
             $editedworksFigure.appendChild($editedworksImg);
             $modallContent.appendChild($editedworksFigure);
             $editedworksFigure.style.margin = "5px"
             $editedworksImg.style.width = "76px"
-    
+
         }
     }
     createEditedWorks()

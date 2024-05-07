@@ -337,11 +337,67 @@ header img {
 	height: 22px;
 }
 
-/* style pour le login */
+/* style pour la modall */
 
-.login-footer {
-	margin-top: 52vh;
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.5);
+	justify-content: center;
+	align-items: center;
 }
+
+.modal-content {
+	background-color: #fefefe;
+
+	border: 1px solid #888;
+	width: 35%;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	display: ruby;
+	padding-left: 50px;
+	padding-right: 50px;
+	padding-bottom: 50px;
+
+}
+
+.modal-content p {
+	width: 75%;
+	font-family: "Work Sans";
+	font-size: 26px;
+	padding-top: 50px;
+	padding-bottom: 45px;
+	padding-left: 35px;
+}
+
+.close {
+	color: black;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+	width: 10%;
+	padding-top: 20px;
+
+}
+
+.close:hover,
+.close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+
+
+/************************************* style pour le login *********************************/
+
 
 input[type="text"],
 input[type="password"] {
@@ -360,6 +416,10 @@ input[type="submit"] {
 	border-radius: 60px;
 	width: 179px;
 	cursor: pointer;
+}
+
+.login-container {
+	padding-bottom: 43vh;
 }
 
 form {
@@ -391,61 +451,3 @@ form {
 	font-weight: 700;
 	line-height: normal;
 }
-
-/* style pour la modall */
-
-.modal {
-	display: none; 
-	position: fixed;
-	z-index: 1;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-
-	overflow: auto;
-	background-color: rgba(0,0,0,0.5); 
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal-content {
-	background-color: #fefefe;
-
-	border: 1px solid #888;
-  width: 35%;
-	border-radius: 10px; 
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); 
-	display: ruby;
-	padding-left: 50px;
-	padding-right: 50px;
-	padding-bottom: 50px;
-
-  }
-  
-  .modal-content p {
-	width: 75%;
-	font-family: "Work Sans";
-font-size: 26px;
-padding-top: 50px;
-padding-bottom: 45px;
-padding-left: 35px;
-  }
-
-  .close {
-	color: black;
-	float: right;
-	font-size: 28px;
-	font-weight: bold;
-	width: 10%;
-	padding-top: 20px;
-	
-  }
-  
-  .close:hover,
-  .close:focus {
-	color: black;
-	text-decoration: none;
-	cursor: pointer;
-  }
-  
