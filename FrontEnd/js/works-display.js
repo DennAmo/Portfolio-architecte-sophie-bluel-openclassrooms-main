@@ -1,26 +1,29 @@
-let $works;
+let $works
+let $categories
 
-function getWorks() {
-    fetch("http://localhost:5678/api/works")
-        .then(response => response.json())
-        .then(data => {  
-            $works = data;
-            createWorks($works);
-        });
+async function getWorks() {
+    try {
+        const response = await fetch("http://localhost:5678/api/works");
+        $works = await response.json();
+        createWorks($works);
+    } catch (error) {
+        console.error('Erreur:', error);
+    }
+}
+
+async function getCategories() {
+    try {
+        const response = await fetch("http://localhost:5678/api/categories");
+        $categories = await response.json();
+        createBtn();
+    } catch (error) {
+        console.error('Erreur:', error);
+    }
 }
 
 getWorks();
+getCategories();
 
-function categories() {
-    fetch("http://localhost:5678/api/categories")
-        .then(response => response.json())
-        .then(data => {  
-            categories = data;
-            createBtn();
-        });
-}
-
-categories();
 
 function createWorks($works) {
     $gallery.innerHTML = "";
@@ -39,14 +42,14 @@ function createWorks($works) {
 
 
 function createBtn() {
-    for (let i = 0; i < categories.length; i++) {
+    for (let i = 0; i < $categories.length; i++) {
         const $containerBtn = document.querySelector('.sort-btn');
-        const $button = document.createElement("button");   
+        const $button = document.createElement("button");
 
         $containerBtn.appendChild($button);
-        $button.textContent = categories[i].name;
-        $button.addEventListener('click',  function() {
-            filterWorksByCategory(categories[i].name);
+        $button.textContent = $categories[i].name;
+        $button.addEventListener('click', function () {
+            filterWorksByCategory($categories[i].name);
         });
     }
 }
@@ -54,7 +57,7 @@ function createBtn() {
 const $gallery = document.querySelector('.gallery');
 const $btnAll = document.getElementById("btn-all");
 
-$btnAll.addEventListener("click", function() {
+$btnAll.addEventListener("click", function () {
     $gallery.innerHTML = "";
     createWorks($works);
 });
