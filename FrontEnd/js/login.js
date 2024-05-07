@@ -1,3 +1,5 @@
+
+
 if (window.location.pathname === "/login.html") {
     document.getElementById("login").addEventListener("submit", async function (form) {
 
@@ -27,30 +29,35 @@ if (window.location.pathname === "/login.html") {
     });
 };
 
+
 if (window.location.pathname === "/index.html") {
+
     const $token = localStorage.getItem('token')
+
     if ($token) {
+        
         const $logBtn = document.querySelector('.logBtn')
         const $portfolio = document.querySelector("#portfolio")
         const $h2 = document.querySelector("#portfolio h2")
-        const $editWorks = document.createElement("aside")
-        $editWorks.innerHTML = "<i class='fa-regular fa-pen-to-square'></i> Modifier"
-        $editWorks.classList.add("edit-button")
-        $h2.insertAdjacentElement('afterend', $editWorks)
+        const $editedworksBtn = document.createElement("aside")
 
+        $editedworksBtn.innerHTML = "<i class='fa-regular fa-pen-to-square'></i> Modifier"
+        $editedworksBtn.classList.add("edit-button")
+        $h2.insertAdjacentElement('afterend', $editedworksBtn)
         $portfolio.style.textAlign = 'center'
         $h2.style.display = 'inline-block'
         $h2.style.paddingRight = '30px'
-        $editWorks.style.display = 'inline-block'
-        $editWorks.style.cursor = 'pointer'
+        $editedworksBtn.style.display = 'inline-block'
+        $editedworksBtn.style.cursor = 'pointer'
 
-        $editWorks.addEventListener('click', function () {
+        
+        $editedworksBtn.addEventListener('click', function () {
             document.getElementById('modal').style.display = 'flex'
         });
         document.getElementsByClassName('close')[0].addEventListener('click', function () {
             document.getElementById('modal').style.display = 'none'
         });
-
+        
         $logBtn.innerHTML = "logout"
         $logBtn.style.cursor = "pointer"
 
@@ -58,6 +65,25 @@ if (window.location.pathname === "/index.html") {
             localStorage.removeItem('token')
             window.location.href = "login.html"
         });
+        
     }
+    
+    const $modallContent = document.querySelector(".modal-content")
+    function createEditedWorks() {
+        for (let i = 0; i < $works.length; i++) {
+           
+            const $editedworksFigure = document.createElement("div");
+            const $editedworksImg = document.createElement("img");
+            
+            $editedworksImg.src = $works[i].imageUrl;
+            $editedworksFigure.appendChild($editedworksImg);
+            $modallContent.appendChild($editedworksFigure);
+            $editedworksFigure.style.margin = "5px"
+            $editedworksImg.style.width = "76px"
+    
+        }
+    }
+    createEditedWorks()
 };
+
 
