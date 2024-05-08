@@ -26,16 +26,15 @@ function createEditedWorks() {
         const $editedworksContainer = document.createElement("div");
         const $editedworksImg = document.createElement("img");
         const $trashIcon = document.createElement("span")
-        
+
         $trashIcon.innerHTML = "<span class= 'trashicon-container'><i class='fa-solid fa-trash fa-sm'></i></span>"
         $editedworksContainer.classList.add("editworks-container")
-
+        
         $editedworksImg.src = $works[i].imageUrl;
+
         $editedworksContainer.appendChild($trashIcon)
         $editedworksContainer.appendChild($editedworksImg);
         $editworksLayout.appendChild($editedworksContainer);
-    
-       
 
     }
 }
