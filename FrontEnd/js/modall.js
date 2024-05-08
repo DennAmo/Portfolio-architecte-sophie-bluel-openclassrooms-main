@@ -1,6 +1,6 @@
 
 if (isTokenPresent()) { 
-    const $modallContent = document.querySelector(".modal-content")
+    const $editworksLayout= document.querySelector(".editworks-layout")
 
     $modall.addEventListener('click', function(event) {
         const isOutside = !event.target.closest(".modal-content");
@@ -19,17 +19,23 @@ if (isTokenPresent()) {
         hideModal()
     });
 
+
 function createEditedWorks() {
     for (let i = 0; i < $works.length; i++) {
 
-        const $editedworksFigure = document.createElement("div");
+        const $editedworksContainer = document.createElement("div");
         const $editedworksImg = document.createElement("img");
+        const $trashIcon = document.createElement("span")
+        
+        $trashIcon.innerHTML = "<span class= 'trashicon-container'><i class='fa-solid fa-trash fa-sm'></i></span>"
+        $editedworksContainer.classList.add("editworks-container")
 
         $editedworksImg.src = $works[i].imageUrl;
-        $editedworksFigure.appendChild($editedworksImg);
-        $modallContent.appendChild($editedworksFigure);
-        $editedworksFigure.style.margin = "5px"
-        $editedworksImg.style.width = "76px"
+        $editedworksContainer.appendChild($trashIcon)
+        $editedworksContainer.appendChild($editedworksImg);
+        $editworksLayout.appendChild($editedworksContainer);
+    
+       
 
     }
 }
@@ -38,4 +44,4 @@ function hideModal() {
     $modall.style.display = 'none';
 }
 
-}
+} 

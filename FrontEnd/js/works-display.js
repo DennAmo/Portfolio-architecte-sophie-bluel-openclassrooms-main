@@ -7,7 +7,7 @@ const isTokenPresent = () => {
 }
 
 if (isTokenPresent()) {
-    const $logBtn = document.querySelector('.logBtn');
+    const $logBtn = document.querySelector('.log-btn');
     const $h2 = document.querySelector("#portfolio h2");
     const $editBtn = document.createElement("aside");
 
@@ -33,7 +33,10 @@ async function getWorks() {
         const response = await fetch("http://localhost:5678/api/works");
         $works = await response.json();
         createWorks($works);
-        createEditedWorks()
+
+        if (isTokenPresent()) {
+            createEditedWorks()
+        }
     } catch (error) {
         console.error('Erreur:', error);
     }
