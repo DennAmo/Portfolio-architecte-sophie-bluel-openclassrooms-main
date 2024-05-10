@@ -16,8 +16,9 @@ if (isTokenPresent()) {
     $h2.insertAdjacentElement('afterend', $editBtn);
 
     $editBtn.addEventListener('click', function () {
-        $modall.style.display = 'flex';
+        modal.style.display = 'flex';
     });
+
 
     $logBtn.innerHTML = "logout";
 
