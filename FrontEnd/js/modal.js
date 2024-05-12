@@ -6,8 +6,11 @@ if (isTokenPresent()) {
     const $modalAddwork = document.querySelector(".modal-addwork")
     const $modalPrevious = document.querySelector(".modal-previous")
     const $categoryContainer = document.getElementById("photo-category");
+    const $submitPhotoForm = document.querySelector(".submit-photo");
 
-
+    /**************************************************************/
+    /********** fonction pour cacher la modal **********/
+    /************************************************************/
     function hideModal() {
         $modall.style.display = 'none';
         $modalContent.style.display = "initial"
@@ -16,22 +19,35 @@ if (isTokenPresent()) {
         $categoryContainer.firstChild.textContent = "Sélectionnez une catégorie";
     }
 
+    /******************************************************************************/
+    /********** fonction pour fermer la modal quand on clique en dehors **********/
+    /****************************************************************************/
     window.addEventListener('click', function (event) {
         if (event.target === $modall) {
             hideModal()
         }
     });
 
+    /******************************************************************************/
+    /********** fonction pour fermer la modal quand on appuie sur échap **********/
+    /****************************************************************************/
     window.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             hideModal()
         }
     });
 
+    /******************************************************************************/
+    /*************** fermer la modal quand on clique sur la croix ****************/
+    /****************************************************************************/
     document.getElementsByClassName('close')[0].addEventListener('click', () => {
         hideModal()
     });
 
+
+    /******************************************************************************/
+    /*********** fonction pour crée les oeuvres dans la modal d'édition **********/
+    /****************************************************************************/
     function createEditedWorks() {
         $editedworksLayout.innerHTML = "";
         for (let i = 0; i < $works.length; i++) {
@@ -48,6 +64,7 @@ if (isTokenPresent()) {
 
             $editedworksImg.src = $works[i].imageUrl;
 
+            /** l'id de l'icone = à l'id de l'oeuvre **/
             $trashIcon.id = $works[i].id;
 
             $editedworksLayout.appendChild($editedworksContainer);
@@ -55,8 +72,8 @@ if (isTokenPresent()) {
             $editedworksContainer.appendChild($editedworksImg);
             $editedworksContainer.appendChild($trashContainer)
 
+            /*** listener sur l'icone trashbin **/
             $trashIcon.addEventListener("click", (e) => {
-
                 if (e.target.matches(".fa-trash-o")) {
                     e.preventDefault();
                     deleteWork(e.target.id);
@@ -66,9 +83,9 @@ if (isTokenPresent()) {
         }
     }
 
-
-
-
+    /************************************************************************************/
+    /********** listener sur le bouton pour ajouter photo et l'icone previous **********/
+    /**********************************************************************************/
     $addworkBtn.addEventListener("click", () => {
         $modalContent.style.display = "none"
         $modalAddwork.style.display = "initial"
@@ -79,6 +96,9 @@ if (isTokenPresent()) {
         $modalAddwork.style.display = "none"
     })
 
+    /********************************************************************************************************************/
+    /********** fonction pour crée les catégories en tant qu'option dans le menu déroulant pour ajouter photo **********/
+    /******************************************************************************************************************/
     function createCategories(categories) {
         categories.forEach(function (category, index) {
             const option = document.createElement("option");
@@ -88,8 +108,17 @@ if (isTokenPresent()) {
         });
     }
 
+    /*********************************************************************/
+    /********** fonction pour supprimer une oeuvre + appel api **********/
+    /*******************************************************************/
 
     function deleteWork(workId) {
+        const confirmed = window.confirm("Êtes-vous sûr de vouloir supprimer cette œuvre ?");
+
+        if (!confirmed) {
+            return;
+        }
+
         let token = sessionStorage.getItem("token");
         fetch(`http://localhost:5678/api/works/${workId}`, {
             method: "DELETE",
@@ -98,30 +127,28 @@ if (isTokenPresent()) {
             },
         })
             .then(response => {
-                if (response.status === 200) {
-                    $works = $works.filter(work => work.id !== workId);
-                    createEditedWorks()
-                    createWorks($works)
-                    console.log(`Work with ID ${workId} deleted successfully.`);
-                    console.log($works)
+                if (response.ok) {
+                    $works = $works.filter(work => parseInt(work.id) !== parseInt(workId));
+                    createEditedWorks();
+                    createWorks($works);
+                    alert("Oeuvre supprimée avec succès");
                 } else if (response.status === 401) {
-
                     console.error(`Unauthorized: ${response.statusText}`);
+                    alert("Vous n'êtes pas autorisé à supprimer cette œuvre.");
                 } else if (response.status === 500) {
-
-                    console.error(`Unexpected Behaviour: ${response.statusText}`);
+                    console.error("Erreur non prévue:", response.statusText);
+                    alert("Une erreur inattendue s'est produite lors de la suppression de l'œuvre.");
                 } else {
-                    console.log($works)
-                    console.error(`Error deleting work with ID ${workId}: ${response.statusText}`);
+                    console.error(`Erreur lors de la suppression de l'œuvre: ${response.statusText}`);
+                    alert(`Erreur inconnu lors de la suppression de l'œuvre: ${response.statusText}`);
                 }
             })
-
-            
-
             .catch(error => {
                 console.error("Error deleting work:", error);
+                alert("Une erreur s'est produite lors de la suppression de l'œuvre.");
             });
     }
 
 
-} 
+
+}

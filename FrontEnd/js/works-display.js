@@ -2,62 +2,50 @@ let $works
 let $categories
 const $modall = document.getElementById('modal')
 
+/*********************************************************************/
+/* fonction pour récuperer la token si générer lors de la connexion */
+/*******************************************************************/
+
 const isTokenPresent = function token() {
     return sessionStorage.getItem('token') ? true : false;
 }
 
-if (isTokenPresent()) {
-    
-    async function getWorks() {
-        try {
-            const response = await fetch("http://localhost:5678/api/works");
-            $works = await response.json();
-            createWorks($works);
-            
-            if (isTokenPresent()) {
-                createEditedWorks()
-            }
-        } catch (error) {
-            console.error('Erreur:', error);
+/**************************************************************/
+/********** fonction pour récuperer données backend **********/
+/************************************************************/
+
+async function getWorks() {
+    try {
+        const response = await fetch("http://localhost:5678/api/works");
+        $works = await response.json();
+
+        createWorks($works);
+        if (isTokenPresent()) {
+            createEditedWorks()
         }
+    } catch (error) {
+        console.error('Erreur:', error);
     }
-    
-    async function getCategories() {
-        try {
-            const response = await fetch("http://localhost:5678/api/categories");
-            $categories = await response.json();
-            createBtn();
-            createCategories($categories)
-        } catch (error) {
-            console.error('Erreur:', error);
-        }
-    }
-    
-    getWorks();
-    getCategories();
-    
-
-    const $logBtn = document.querySelector('.log-btn');
-    const $h2 = document.querySelector("#portfolio h2");
-    const $editBtn = document.createElement("aside");
-
-    $editBtn.classList.add("edit-button");
-    $editBtn.innerHTML = "<i class='fa-regular fa-pen-to-square'></i> Modifier";
-    $h2.insertAdjacentElement('afterend', $editBtn);
-
-    $editBtn.addEventListener('click', function () {
-        modal.style.display = 'flex';
-    });
-
-
-    $logBtn.innerHTML = "logout";
-
-
-    $logBtn.addEventListener('click', function () {
-        sessionStorage.clear();
-        window.location.href = "login.html";
-    });
 }
+
+async function getCategories() {
+    try {
+        const response = await fetch("http://localhost:5678/api/categories");
+        $categories = await response.json();
+        createBtn();
+        createCategories($categories)
+    } catch (error) {
+        console.error('Erreur:', error);
+    }
+}
+
+getWorks();
+getCategories();
+
+
+/**************************************************************/
+/***** fonction pour crée les oeuvres sur page d'accueil *****/
+/************************************************************/
 
 function createWorks($works) {
     $gallery.innerHTML = "";
@@ -74,6 +62,9 @@ function createWorks($works) {
     }
 }
 
+/**************************************************************/
+/***** fonction pour crée les boutons sur page d'accueil *****/
+/************************************************************/
 
 function createBtn() {
     for (let i = 0; i < $categories.length; i++) {
@@ -96,6 +87,10 @@ $btnAll.addEventListener("click", function () {
     createWorks($works);
 });
 
+/**************************************************************/
+/**** fonction pour filtré les oeuvres sur page d'accueil ****/
+/************************************************************/
+
 function filterWorksByCategory(categoryName) {
     $gallery.innerHTML = "";
     const $filteredWorks = $works.filter(filterParam => filterParam.category.name === categoryName);
@@ -103,3 +98,31 @@ function filterWorksByCategory(categoryName) {
 }
 
 
+/**************************************************************/
+/***** exception pour création de contenu admin connecté *****/
+/************************************************************/
+
+if (isTokenPresent()) {
+
+
+    const $logBtn = document.querySelector('.log-btn');
+    const $h2 = document.querySelector("#portfolio h2");
+    const $editBtn = document.createElement("aside");
+
+    $editBtn.classList.add("edit-button");
+    $editBtn.innerHTML = "<i class='fa-regular fa-pen-to-square'></i> Modifier";
+    $h2.insertAdjacentElement('afterend', $editBtn);
+
+    $editBtn.addEventListener('click', function () {
+        modal.style.display = 'flex';
+    });
+
+
+    $logBtn.innerHTML = "logout";
+
+
+    $logBtn.addEventListener('click', function () {
+        sessionStorage.clear();
+        window.location.href = "login.html";
+    });
+}
