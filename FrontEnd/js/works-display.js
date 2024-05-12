@@ -2,11 +2,41 @@ let $works
 let $categories
 const $modall = document.getElementById('modal')
 
-const isTokenPresent = () => {
+const isTokenPresent = function token() {
     return sessionStorage.getItem('token') ? true : false;
 }
 
 if (isTokenPresent()) {
+    
+    async function getWorks() {
+        try {
+            const response = await fetch("http://localhost:5678/api/works");
+            $works = await response.json();
+            createWorks($works);
+            
+            if (isTokenPresent()) {
+                createEditedWorks()
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+        }
+    }
+    
+    async function getCategories() {
+        try {
+            const response = await fetch("http://localhost:5678/api/categories");
+            $categories = await response.json();
+            createBtn();
+            createCategories($categories)
+        } catch (error) {
+            console.error('Erreur:', error);
+        }
+    }
+    
+    getWorks();
+    getCategories();
+    
+
     const $logBtn = document.querySelector('.log-btn');
     const $h2 = document.querySelector("#portfolio h2");
     const $editBtn = document.createElement("aside");
@@ -28,34 +58,6 @@ if (isTokenPresent()) {
         window.location.href = "login.html";
     });
 }
-
-async function getWorks() {
-    try {
-        const response = await fetch("http://localhost:5678/api/works");
-        $works = await response.json();
-        createWorks($works);
-
-        if (isTokenPresent()) {
-            createEditedWorks()
-        }
-    } catch (error) {
-        console.error('Erreur:', error);
-    }
-}
-
-async function getCategories() {
-    try {
-        const response = await fetch("http://localhost:5678/api/categories");
-        $categories = await response.json();
-        createBtn();
-    } catch (error) {
-        console.error('Erreur:', error);
-    }
-}
-
-getWorks();
-getCategories();
-
 
 function createWorks($works) {
     $gallery.innerHTML = "";

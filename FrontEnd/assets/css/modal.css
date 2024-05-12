@@ -93,29 +93,26 @@ width: 76px;
 }
 
 .trashicon-container,
-.fa-trash {
-	position: absolute;
-	right: 0px;
+.fa-trash-o{
+position: absolute;
+right: 8px;
+top: 8px;
 }
 
 .trashicon-container {
     background-color: black;
-	padding-left: 10px;
-	padding-bottom: 10px;
-	width: 6px;
-	height: 6px;
-	margin-top: 9px;
-	margin-right: 9px;
+	padding-right: 0px;
+	width: 12px;
+	height: 15px;
 }
 
-.fa-trash {
+.fa-trash-o {
+	top: 8px;
+	right: 8.3px;
+	z-index: 1;
 	color: white;
-	margin-top: 8.2px;
-	margin-right: 3px;
 	cursor: pointer;
 }
-
-
 
 .custom-text {
     display: inline-block;
