@@ -6,7 +6,7 @@ if (isTokenPresent()) {
     const $modalAddwork = document.querySelector(".modal-addwork")
     const $modalPrevious = document.querySelector(".modal-previous")
     const $categoryContainer = document.getElementById("photo-category");
-    const $submitPhotoForm = document.querySelector(".submit-photo");
+    const $submitPhoto = document.querySelector(".submit-photo");
 
     /**************************************************************/
     /********** fonction pour cacher la modal **********/
@@ -63,8 +63,6 @@ if (isTokenPresent()) {
             $editedworksContainer.classList.add("editworks-container")
 
             $editedworksImg.src = $works[i].imageUrl;
-
-            /** l'id de l'icone = à l'id de l'oeuvre **/
             $trashIcon.id = $works[i].id;
 
             $editedworksLayout.appendChild($editedworksContainer);
@@ -72,7 +70,6 @@ if (isTokenPresent()) {
             $editedworksContainer.appendChild($editedworksImg);
             $editedworksContainer.appendChild($trashContainer)
 
-            /*** listener sur l'icone trashbin **/
             $trashIcon.addEventListener("click", (e) => {
                 if (e.target.matches(".fa-trash-o")) {
                     e.preventDefault();
@@ -91,10 +88,12 @@ if (isTokenPresent()) {
         $modalAddwork.style.display = "initial"
     })
 
-    $modalPrevious.addEventListener("click", () => {
+    function getBackInModal() {
         $modalContent.style.display = "initial"
         $modalAddwork.style.display = "none"
-    })
+    }
+
+    $modalPrevious.addEventListener("click", getBackInModal())
 
     /********************************************************************************************************************/
     /********** fonction pour crée les catégories en tant qu'option dans le menu déroulant pour ajouter photo **********/
@@ -111,7 +110,6 @@ if (isTokenPresent()) {
     /*********************************************************************/
     /********** fonction pour supprimer une oeuvre + appel api **********/
     /*******************************************************************/
-
     function deleteWork(workId) {
         const confirmed = window.confirm("Êtes-vous sûr de vouloir supprimer cette œuvre ?");
 
@@ -131,16 +129,13 @@ if (isTokenPresent()) {
                     $works = $works.filter(work => parseInt(work.id) !== parseInt(workId));
                     createEditedWorks();
                     createWorks($works);
-                    alert("Oeuvre supprimée avec succès");
+                    alert(`Oeuvre supprimée avec succès`);
                 } else if (response.status === 401) {
-                    console.error(`Unauthorized: ${response.statusText}`);
-                    alert("Vous n'êtes pas autorisé à supprimer cette œuvre.");
+                    alert(`Vous n'êtes pas autorisé à supprimer cette œuvre.`);
                 } else if (response.status === 500) {
-                    console.error("Erreur non prévue:", response.statusText);
-                    alert("Une erreur inattendue s'est produite lors de la suppression de l'œuvre.");
+                    alert(`Une erreur inattendue s'est produite lors de la suppression de l'œuvre.`);
                 } else {
-                    console.error(`Erreur lors de la suppression de l'œuvre: ${response.statusText}`);
-                    alert(`Erreur inconnu lors de la suppression de l'œuvre: ${response.statusText}`);
+                    alert(`Erreur inconnu lors de la suppression de l'œuvre`);
                 }
             })
             .catch(error => {
@@ -149,6 +144,106 @@ if (isTokenPresent()) {
             });
     }
 
+/**************************************************************/
+/******** listener sur le formulaire d'ajout d'oeuvre ********/
+/************************************************************/
+    $submitPhoto.addEventListener("click", (e) => {
+        if (e.target.matches(".submit-photo")) {
+            e.preventDefault();
+            postNewWork();
+        }
+    });
 
+/***********************************************************************************/
+/************ fonction pour récuperer les données reçu du formulaire **************/
+/*********************************************************************************/
+    function postNewWork() {
+        let token = sessionStorage.getItem("token");
+        const $categories = document.getElementById("photo-category");
+        const $image = document.getElementById("photo-upload").files[0];
+        const $title = document.getElementById("photo-title").value;
+        const $categoryName = $categories.options[$categories.selectedIndex].innerText;
+        const $categoryId = $categories.options[$categories.selectedIndex].value;
+
+        let $validity = formValidation($image, $title, $categoryId);
+        if ($validity === true) {
+            const $formData = new FormData();
+            $formData.append("image", $image);
+            $formData.append("title", $title);
+            $formData.append("category", $categoryId);
+
+            sendNewData(token, $formData, $title, $categoryName);
+        }
+     
+    };
+
+/***********************************************************************************/
+/************ fonction pour vérifier si le formulaire est bien rempli *************/
+/*********************************************************************************/
+    function formValidation(image, title, categoryId) {
+        if (image == undefined){
+          alert("Veuillez ajouter une image");
+          return false;
+        }
+        if (title.trim().length == 0){    
+          alert("Veuillez ajouter un titre");
+          return false;
+        }
+        if (categoryId == ""){
+          alert("Veuillez choisir une catégorie");
+          return false;
+        }else{
+        return true;
+        }
+      }
+
+/**************************************************************************************************/
+/************ fonction pour crée une oeuvre dans le même modèle que celles présentes *************/
+/************************************************************************************************/
+      function addToWorksArray(data, categoryName) {
+        newWork = {};
+        newWork.title = data.title;
+        newWork.id = data.id;
+        newWork.category = {"id" : data.$categoryId, "name" : categoryName};
+        newWork.imageUrl = data.imageUrl;
+        $works.push(newWork);
+      }
+
+/***************************************************/
+/************ fonction pour appel api *************/
+/*************************************************/
+      function sendNewData(token, formData, categoryName) {
+        fetch(`http://localhost:5678/api/works/`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+          body: formData,
+        })
+          .then((response) => {
+            if (response.status === 201) {
+              alert("Nouveau fichier envoyé avec succés");
+              return response.json();
+            } else if (response.status === 401) {
+                alert(`Vous n'êtes pas autorisé à ajouter cette œuvre.`);
+            } else if (response.status === 500) {
+                alert(`Une erreur inattendue s'est produite lors de l'ajout de l'œuvre.`);
+            } else {
+                alert(`Erreur inconnu lors de l'ajout de l'œuvre`);
+            }
+            
+          })
+          .then ((data) => {
+            if (data) { 
+                addToWorksArray(data, categoryName);
+            } else {
+                console.error("Erreur: Les données reçues sont indéfinies ou corrompus.");
+            }
+            createWorks($works)
+            createEditedWorks()
+            getBackInModal()
+          })
+          .catch((error) => console.error("Erreur:", error));
+      }
 
 }
