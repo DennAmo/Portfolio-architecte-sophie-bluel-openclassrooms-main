@@ -20,6 +20,7 @@ document.getElementById("login").addEventListener("submit", async function (form
             window.location.href = "index.html"
 
         } else {
+            alert("Mauvais mot de passe ou nom d'utilisateur")
             console.error('connexion error')
         }
     } catch (error) {

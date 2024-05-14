@@ -256,7 +256,7 @@ if (isTokenPresent()) {
                 if (data) {
                     addToWorksArray(data, categoryName);
                 } else {
-                    console.error("Erreur: Les données reçues sont indéfinies ou corrompus.");
+                    alert(`Erreur: Les données reçues sont indéfinies ou corrompus.`);
                 }
                 createWorks($works)
                 createEditedWorks()

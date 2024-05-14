@@ -2,6 +2,8 @@ let $works
 let $categories
 const $modall = document.getElementById('modal')
 const $categoryContainer = document.getElementById("photo-category");
+const $containerBtn = document.querySelector('.sort-btn');
+const $gallery = document.querySelector('.gallery');
 
 /*********************************************************************/
 /* fonction pour récuperer la token si générer lors de la connexion */
@@ -71,7 +73,6 @@ function createWorks($works) {
 
 function createBtn() {
     for (let i = 0; i < $categories.length; i++) {
-        const $containerBtn = document.querySelector('.sort-btn');
         const $button = document.createElement("button");
 
         $containerBtn.appendChild($button);
@@ -82,7 +83,6 @@ function createBtn() {
     }
 }
 
-const $gallery = document.querySelector('.gallery');
 const $btnAll = document.getElementById("btn-all");
 
 $btnAll.addEventListener("click", function () {
@@ -100,16 +100,16 @@ function filterWorksByCategory(categoryName) {
     createWorks($filteredWorks);
 }
 
-
 /**************************************************************/
 /***** exception pour création de contenu admin connecté *****/
 /************************************************************/
 
 if (isTokenPresent()) {
 
-
+    const body = document.querySelector("body");
     const $logBtn = document.querySelector('.log-btn');
     const $h2 = document.querySelector("#portfolio h2");
+
     const $editBtn = document.createElement("aside");
 
     $editBtn.classList.add("edit-button");
@@ -120,13 +120,21 @@ if (isTokenPresent()) {
         modal.style.display = 'flex';
     });
 
-
     $logBtn.innerHTML = "logout";
-
 
     $logBtn.addEventListener('click', function () {
         sessionStorage.clear();
         window.location.href = "login.html";
     });
+    
+    const editMode = document.createElement("p");
+    const topMenu = document.createElement("div");
+    topMenu.className = "topMenu";
+    editMode.innerHTML = `<i class="fa-regular fa-pen-to-square"></i>Mode édition`;
+
+    body.insertAdjacentElement("afterbegin", topMenu);
+    topMenu.append(editMode);
+    $containerBtn.style.display = "none"
+    $gallery.style.paddingTop = "50px"
 
 }
