@@ -403,16 +403,3 @@ form {
 	font-weight: 700;
 	line-height: normal;
 }
-
-#picturePreview {
-	display: flex;
-	background-color: #E8F1F6;
-	height: 200px;
-	width: 100%;
-	justify-content: center;
-}
-#picturePreview img {
-	height: 100%;
-	width: 31%;
-	object-fit: cover;
-}
