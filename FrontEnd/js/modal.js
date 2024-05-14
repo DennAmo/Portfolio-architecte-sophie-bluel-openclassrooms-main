@@ -14,8 +14,6 @@ if (isTokenPresent()) {
         $modall.style.display = 'none';
         $modalContent.style.display = "initial"
         $modalAddwork.style.display = "none"
-        $categoryContainer.selectedIndex = 0;
-        $categoryContainer.firstChild.textContent = "Sélectionnez une catégorie";
     }
 
     /******************************************************************************/
@@ -40,6 +38,9 @@ if (isTokenPresent()) {
     /*************** fermer la modal quand on clique sur la croix ****************/
     /****************************************************************************/
     document.getElementsByClassName('close')[0].addEventListener('click', () => {
+        hideModal()
+    });
+    document.getElementsByClassName('close')[1].addEventListener('click', () => {
         hideModal()
     });
 
@@ -92,18 +93,19 @@ if (isTokenPresent()) {
         $modalAddwork.style.display = "none"
     }
 
-    
     $modalPrevious.addEventListener("click", getBackInModal)
 
-     /******************************************************************************************************************/
+    /******************************************************************************************************************/
     /********** fonction pour crée les catégories en tant qu'option dans le menu déroulant pour ajouter photo *********/
-   /******************************************************************************************************************/
+    /******************************************************************************************************************/
     function createCategories(categories) {
         categories.forEach(function (category, index) {
             const option = document.createElement("option");
             option.value = index + 1;
             option.text = category.name;
             $categoryContainer.appendChild(option);
+            $categoryContainer.selectedIndex = 0;
+            $categoryContainer.firstChild.textContent = "Sélectionnez une catégorie";
         });
     }
 
@@ -112,7 +114,7 @@ if (isTokenPresent()) {
     /*********************************************************************/
     /********** fonction pour supprimer une oeuvre + appel api **********/
     /*******************************************************************/
-    function deleteWork(workId, ) {
+    function deleteWork(workId,) {
         const confirmed = window.confirm("Êtes-vous sûr de vouloir supprimer cette œuvre ?");
 
         if (!confirmed) {
@@ -131,6 +133,7 @@ if (isTokenPresent()) {
                     $works = $works.filter(work => parseInt(work.id) !== parseInt(workId));
                     createEditedWorks();
                     createWorks($works);
+                    hideModal()
                     alert(`Oeuvre supprimée avec succès`);
                 } else if (response.status === 401) {
                     alert(`Vous n'êtes pas autorisé à supprimer cette œuvre.`);
@@ -146,9 +149,9 @@ if (isTokenPresent()) {
             });
     }
 
-/**************************************************************/
-/******** listener sur le formulaire d'ajout d'oeuvre ********/
-/************************************************************/
+    /**************************************************************/
+    /******** listener sur le formulaire d'ajout d'oeuvre ********/
+    /************************************************************/
     $submitPhoto.addEventListener("click", (e) => {
         if (e.target.matches(".submit-photo")) {
             e.preventDefault();
@@ -156,9 +159,23 @@ if (isTokenPresent()) {
         }
     });
 
-/***********************************************************************************/
-/************ fonction pour récuperer les données reçu du formulaire **************/
-/*********************************************************************************/
+    const fileInput = document.getElementById('photo-upload');
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const previewImage = document.getElementById('preview-image');
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    /***********************************************************************************/
+    /************ fonction pour récuperer les données reçu du formulaire **************/
+    /*********************************************************************************/
     function postNewWork() {
         let token = sessionStorage.getItem("token");
         const $categories = document.getElementById("photo-category");
@@ -176,76 +193,76 @@ if (isTokenPresent()) {
 
             sendNewData(token, $formData, $title, $categoryName);
         }
-     
+
     };
 
-/***********************************************************************************/
-/************ fonction pour vérifier si le formulaire est bien rempli *************/
-/*********************************************************************************/
+    /***********************************************************************************/
+    /************ fonction pour vérifier si le formulaire est bien rempli *************/
+    /*********************************************************************************/
     function formValidation(image, title, categoryId) {
-        if (image == undefined){
-          alert("Veuillez ajouter une image");
-          return false;
+        if (image == undefined) {
+            alert("Veuillez ajouter une image");
+            return false;
         }
-        if (title.trim().length == 0){    
-          alert("Veuillez ajouter un titre");
-          return false;
+        if (title.trim().length == 0) {
+            alert("Veuillez ajouter un titre");
+            return false;
         }
-        if (categoryId == ""){
-          alert("Veuillez choisir une catégorie");
-          return false;
-        }else{
-        return true;
+        if (categoryId == "") {
+            alert("Veuillez choisir une catégorie");
+            return false;
+        } else {
+            return true;
         }
-      }
+    }
 
-/**************************************************************************************************/
-/************ fonction pour crée une oeuvre dans le même modèle que celles présentes *************/
-/************************************************************************************************/
-      function addToWorksArray(data, categoryName) {
+    /****************************************************************************************************/
+    /************ fonction pour ajouté une oeuvre dans le même modèle que celles présentes *************/
+    /**************************************************************************************************/
+    function addToWorksArray(data, categoryName) {
         newWork = {};
         newWork.title = data.title;
         newWork.id = data.id;
-        newWork.category = {"id" : data.$categoryId, "name" : categoryName};
+        newWork.category = { "id": data.$categoryId, "name": categoryName };
         newWork.imageUrl = data.imageUrl;
         $works.push(newWork);
-      }
+    }
 
-/***************************************************/
-/************ fonction pour appel api *************/
-/*************************************************/
-      function sendNewData(token, formData, categoryName) {
+    /***************************************************/
+    /************ fonction pour appel api *************/
+    /*************************************************/
+    function sendNewData(token, formData, categoryName) {
         fetch(`http://localhost:5678/api/works/`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-          body: formData,
+            body: formData,
         })
-          .then((response) => {
-            if (response.status === 201) {
-              alert("Oeuvre envoyé avec succés");
-              return response.json();
-            } else if (response.status === 401) {
-                alert(`Vous n'êtes pas autorisé à ajouter cette œuvre.`);
-            } else if (response.status === 500) {
-                alert(`Une erreur inattendue s'est produite lors de l'ajout de l'œuvre.`);
-            } else {
-                alert(`Erreur inconnu lors de l'ajout de l'œuvre`);
-            }
-            
-          })
-          .then ((data) => {
-            if (data) { 
-                addToWorksArray(data, categoryName);
-            } else {
-                console.error("Erreur: Les données reçues sont indéfinies ou corrompus.");
-            }
-            createWorks($works)
-            createEditedWorks()
-            getBackInModal()
-          })
-          .catch((error) => console.error("Erreur:", error));
-      }
+            .then((response) => {
+                if (response.status === 201) {
+                    alert("Oeuvre envoyé avec succés");
+                    return response.json();
+                } else if (response.status === 401) {
+                    alert(`Vous n'êtes pas autorisé à ajouter cette œuvre.`);
+                } else if (response.status === 500) {
+                    alert(`Une erreur inattendue s'est produite lors de l'ajout de l'œuvre.`);
+                } else {
+                    alert(`Erreur inconnu lors de l'ajout de l'œuvre`);
+                }
+
+            })
+            .then((data) => {
+                if (data) {
+                    addToWorksArray(data, categoryName);
+                } else {
+                    console.error("Erreur: Les données reçues sont indéfinies ou corrompus.");
+                }
+                createWorks($works)
+                createEditedWorks()
+                hideModal()
+            })
+            .catch((error) => console.error("Erreur:", error));
+    }
 
 }

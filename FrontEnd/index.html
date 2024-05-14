@@ -67,19 +67,26 @@
 					</a>
 					<div class="formphoto-layout">
 						<form id="add-photo-form">
-							<label for="photo-upload" class="custom-text">
-								<span>Ajouter une photo</span>
+							<h3>Ajout photo</h3>
+							<span class="close">&times;</span>
+							<label for="photo-upload" class="photo-layout">
+								<p>jpg, png : 4mo max</p>
+								<span>+ Ajouter photo</span>
+								<img id="preview-image" src="./assets/icons/picture.png"
+									alt="Prévisualisation de l'image">
 								<input type="file" id="photo-upload" name="photo" accept="image/*" required>
 							</label>
 
-							<label for="photo-title">Titre de la photo:</label>
-							<input type="text" id="photo-title" name="title" required>
 
-							<label for="photo-category">Catégorie:</label>
-							<select id="photo-category" name="category" required>
-								<option value="" disabled selected hidden>Sélectionnez une catégorie</option>
-							</select>
+							<div class="categories-title-layout">
+								<label for="photo-title">Titre</label>
+								<input type="text" id="photo-title" name="title" required>
 
+								<label for="photo-category">Catégorie:</label>
+								<select id="photo-category" name="category" required>
+									<option value="" disabled selected hidden>Sélectionnez une catégorie</option>
+								</select>
+							</div>
 							<div class="after-line"></div>
 							<button type="submit" class="submit-photo">Valider</button>
 						</form>
