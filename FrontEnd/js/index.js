@@ -1,6 +1,7 @@
 let $works
 let $categories
 const $modall = document.getElementById('modal')
+const $categoryContainer = document.getElementById("photo-category");
 
 /*********************************************************************/
 /* fonction pour récuperer la token si générer lors de la connexion */
@@ -28,6 +29,7 @@ async function getWorks() {
     }
 }
 
+
 async function getCategories() {
     try {
         const response = await fetch("http://localhost:5678/api/categories");
@@ -38,6 +40,7 @@ async function getCategories() {
         console.error('Erreur:', error);
     }
 }
+
 
 getWorks();
 getCategories();
@@ -125,4 +128,5 @@ if (isTokenPresent()) {
         sessionStorage.clear();
         window.location.href = "login.html";
     });
+
 }

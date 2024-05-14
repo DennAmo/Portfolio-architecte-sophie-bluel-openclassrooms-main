@@ -5,7 +5,6 @@ if (isTokenPresent()) {
     const $modalContent = document.querySelector(".modal-content")
     const $modalAddwork = document.querySelector(".modal-addwork")
     const $modalPrevious = document.querySelector(".modal-previous")
-    const $categoryContainer = document.getElementById("photo-category");
     const $submitPhoto = document.querySelector(".submit-photo");
 
     /**************************************************************/
@@ -93,11 +92,12 @@ if (isTokenPresent()) {
         $modalAddwork.style.display = "none"
     }
 
-    $modalPrevious.addEventListener("click", getBackInModal())
+    
+    $modalPrevious.addEventListener("click", getBackInModal)
 
-    /********************************************************************************************************************/
-    /********** fonction pour crée les catégories en tant qu'option dans le menu déroulant pour ajouter photo **********/
-    /******************************************************************************************************************/
+     /******************************************************************************************************************/
+    /********** fonction pour crée les catégories en tant qu'option dans le menu déroulant pour ajouter photo *********/
+   /******************************************************************************************************************/
     function createCategories(categories) {
         categories.forEach(function (category, index) {
             const option = document.createElement("option");
@@ -107,10 +107,12 @@ if (isTokenPresent()) {
         });
     }
 
+
+
     /*********************************************************************/
     /********** fonction pour supprimer une oeuvre + appel api **********/
     /*******************************************************************/
-    function deleteWork(workId) {
+    function deleteWork(workId, ) {
         const confirmed = window.confirm("Êtes-vous sûr de vouloir supprimer cette œuvre ?");
 
         if (!confirmed) {
@@ -222,7 +224,7 @@ if (isTokenPresent()) {
         })
           .then((response) => {
             if (response.status === 201) {
-              alert("Nouveau fichier envoyé avec succés");
+              alert("Oeuvre envoyé avec succés");
               return response.json();
             } else if (response.status === 401) {
                 alert(`Vous n'êtes pas autorisé à ajouter cette œuvre.`);
