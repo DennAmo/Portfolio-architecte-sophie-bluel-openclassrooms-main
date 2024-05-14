@@ -50,6 +50,7 @@ if (isTokenPresent()) {
     /****************************************************************************/
     function createEditedWorks() {
         $editedworksLayout.innerHTML = "";
+
         for (let i = 0; i < $works.length; i++) {
 
             const $editedworksContainer = document.createElement("div");
@@ -133,7 +134,6 @@ if (isTokenPresent()) {
                     $works = $works.filter(work => parseInt(work.id) !== parseInt(workId));
                     createEditedWorks();
                     createWorks($works);
-                    hideModal()
                     alert(`Oeuvre supprimée avec succès`);
                 } else if (response.status === 401) {
                     alert(`Vous n'êtes pas autorisé à supprimer cette œuvre.`);
@@ -199,22 +199,41 @@ if (isTokenPresent()) {
     /***********************************************************************************/
     /************ fonction pour vérifier si le formulaire est bien rempli *************/
     /*********************************************************************************/
-    function formValidation(image, title, categoryId) {
-        if (image == undefined) {
-            alert("Veuillez ajouter une image");
-            return false;
-        }
-        if (title.trim().length == 0) {
-            alert("Veuillez ajouter un titre");
-            return false;
-        }
-        if (categoryId == "") {
-            alert("Veuillez choisir une catégorie");
+    function formValidation() {
+   
+        const image = document.getElementById("photo-upload").files[0];
+        const title = document.getElementById("photo-title").value;
+        const categoryId = document.getElementById("photo-category").value;
+
+
+        if (!image || title.trim().length === 0 || categoryId === "") {
             return false;
         } else {
             return true;
         }
+
     }
+
+    const testForm = () => {
+        const $title = document.getElementById("photo-title");
+        const $categories = document.getElementById("photo-category");
+        const $image = document.getElementById("photo-upload");
+
+        const updateSubmitButton = () => {
+            formValidation() ? $submitPhoto.removeAttribute("disabled") : $submitPhoto.setAttribute("disabled", "");
+            if (formValidation()) {
+                $submitPhoto.classList.add("submit-photo-active")
+            } else {
+                $submitPhoto.classList.remove("submit-photo-active")
+            }
+        };
+        
+        $title.addEventListener('input', updateSubmitButton);
+        $categories.addEventListener('change', updateSubmitButton);
+        $image.addEventListener('change', updateSubmitButton);
+
+    }
+    testForm()
 
     /****************************************************************************************************/
     /************ fonction pour ajouté une oeuvre dans le même modèle que celles présentes *************/
@@ -260,7 +279,6 @@ if (isTokenPresent()) {
                 }
                 createWorks($works)
                 createEditedWorks()
-                hideModal()
             })
             .catch((error) => console.error("Erreur:", error));
     }
