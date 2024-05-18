@@ -6,6 +6,11 @@ if (isTokenPresent()) {
     const $modalAddwork = document.querySelector(".modal-addwork")
     const $modalPrevious = document.querySelector(".modal-previous")
     const $submitPhoto = document.querySelector(".submit-photo");
+    const $title = document.getElementById("photo-title");
+    const $categories = document.getElementById("photo-category");
+    const $image = document.getElementById("photo-upload");
+    const previewImage = document.getElementById('preview-image');
+
 
     /**************************************************************/
     /********** fonction pour cacher la modal **********/
@@ -14,6 +19,7 @@ if (isTokenPresent()) {
         $modall.style.display = 'none';
         $modalContent.style.display = "initial"
         $modalAddwork.style.display = "none"
+        resetFormFields()
     }
 
     /******************************************************************************/
@@ -92,6 +98,7 @@ if (isTokenPresent()) {
     function getBackInModal() {
         $modalContent.style.display = "initial"
         $modalAddwork.style.display = "none"
+        resetFormFields()
     }
 
     $modalPrevious.addEventListener("click", getBackInModal)
@@ -165,7 +172,7 @@ if (isTokenPresent()) {
         if (file) {
             const reader = new FileReader();
             reader.onload = function (e) {
-                const previewImage = document.getElementById('preview-image');
+
                 previewImage.src = e.target.result;
                 previewImage.style.display = 'block';
             };
@@ -178,7 +185,6 @@ if (isTokenPresent()) {
     /*********************************************************************************/
     function postNewWork() {
         let token = sessionStorage.getItem("token");
-        const $categories = document.getElementById("photo-category");
         const $image = document.getElementById("photo-upload").files[0];
         const $title = document.getElementById("photo-title").value;
         const $categoryName = $categories.options[$categories.selectedIndex].innerText;
@@ -215,22 +221,17 @@ if (isTokenPresent()) {
     }
 
     const testForm = () => {
-        const $title = document.getElementById("photo-title");
-        const $categories = document.getElementById("photo-category");
-        const $image = document.getElementById("photo-upload");
 
-        const updateSubmitButton = () => {
             formValidation() ? $submitPhoto.removeAttribute("disabled") : $submitPhoto.setAttribute("disabled", "");
             if (formValidation()) {
                 $submitPhoto.classList.add("submit-photo-active")
             } else {
                 $submitPhoto.classList.remove("submit-photo-active")
             }
-        };
         
-        $title.addEventListener('input', updateSubmitButton);
-        $categories.addEventListener('change', updateSubmitButton);
-        $image.addEventListener('change', updateSubmitButton);
+        $title.addEventListener('input', testForm);
+        $categories.addEventListener('change', testForm);
+        $image.addEventListener('change', testForm);
 
     }
     testForm()
@@ -245,6 +246,13 @@ if (isTokenPresent()) {
         newWork.category = { "id": data.$categoryId, "name": categoryName };
         newWork.imageUrl = data.imageUrl;
         $works.push(newWork);
+    }
+
+
+    function resetFormFields() {
+        previewImage.src = './assets/icons/picture.png'
+        $categories.selectedIndex = 0; 
+        $title.value = '';
     }
 
     /***************************************************/
@@ -279,6 +287,7 @@ if (isTokenPresent()) {
                 }
                 createWorks($works)
                 createEditedWorks()
+                getBackInModal()
             })
             .catch((error) => console.error("Erreur:", error));
     }
