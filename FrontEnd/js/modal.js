@@ -166,8 +166,8 @@ if (isTokenPresent()) {
         }
     });
 
-    const fileInput = document.getElementById('photo-upload');
-    fileInput.addEventListener('change', (event) => {
+    
+    $image.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
