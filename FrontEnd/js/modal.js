@@ -147,10 +147,12 @@ if (isTokenPresent()) {
     /******** listener sur le formulaire d'ajout d'oeuvre ********/
     /************************************************************/
     submitPhoto.addEventListener("click", (e) => {
+        
         e.preventDefault();
-        formAlert()
-        postNewWork();
-
+        
+        if (formAlert()) {
+            postNewWork();
+        }
     });
 
     /* preview */
@@ -194,23 +196,24 @@ if (isTokenPresent()) {
     /************ fonction pour vérifier si le formulaire est bien rempli *************/
     /*********************************************************************************/
   
+    const MAX_FILE_SIZE = 4000;
 
     const formAlert = function() {
         const image = document.getElementById("photo-upload").files[0];
         const title = document.getElementById("photo-title").value;
         const categoryId = document.getElementById("photo-category").value;
         
-        if (!image){
-          alert("Veuillez ajouter une image");
-     
-        }
+        if (!image) {
+            alert("Veuillez ajouter une image");
+          } else if (image.size > MAX_FILE_SIZE) {
+            alert("La taille du fichier dépasse 4 Mo. Veuillez choisir un fichier plus petit.");
+          }
         if (title.trim().length == 0){    
           alert("Veuillez ajouter un titre");
     
         }
         if (categoryId == ""){
           alert("Veuillez choisir une catégorie");
-    
         }
       }
 
@@ -220,7 +223,7 @@ if (isTokenPresent()) {
         const $title = document.getElementById("photo-title").value;
         const $categoryId = document.getElementById("photo-category").value;
 
-        if (!$image || $title.trim().length === 0 || $categoryId === "") {
+        if (!$image || image.size > MAX_FILE_SIZE || $title.trim().length === 0 || $categoryId === "") {
             return false;
         } else {
             return true;
