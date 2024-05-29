@@ -1,5 +1,7 @@
 
 if (isTokenPresent()) {
+
+
     const $editedworksLayout = document.querySelector(".editworks-layout")
     const $addworkBtn = document.querySelector(".addwork-button")
     const $modalContent = document.querySelector(".modal-content")
@@ -10,10 +12,11 @@ if (isTokenPresent()) {
     const $categories = document.getElementById("photo-category");
     const $image = document.getElementById("photo-upload");
     const previewImage = document.getElementById('preview-image');
-
+    const alertTitle = document.querySelector(".phototitle")
+    const alertCategory = document.querySelector(".category-title")
 
     /**************************************************************/
-    /********** fonction pour cacher la modal **********/
+    /********** fonction pour cacher la modal ********************/
     /************************************************************/
     function hideModal() {
         $modall.style.display = 'none';
@@ -78,10 +81,8 @@ if (isTokenPresent()) {
             $editedworksContainer.appendChild($trashContainer)
 
             $trashIcon.addEventListener("click", (e) => {
-                if (e.target.matches(".fa-trash-o")) {
-                    e.preventDefault();
-                    deleteWork(e.target.id);
-                }
+                e.preventDefault();
+                deleteWork(e.target.id);
             });
 
         }
@@ -160,13 +161,13 @@ if (isTokenPresent()) {
     /******** listener sur le formulaire d'ajout d'oeuvre ********/
     /************************************************************/
     $submitPhoto.addEventListener("click", (e) => {
-        if (e.target.matches(".submit-photo")) {
-            e.preventDefault();
-            postNewWork();
-        }
+        e.preventDefault();
+        postNewWork();
+
     });
 
-    
+    /* preview */
+
     $image.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -180,9 +181,9 @@ if (isTokenPresent()) {
         }
     });
 
-    /***********************************************************************************/
-    /************ fonction pour récuperer les données reçu du formulaire **************/
-    /*********************************************************************************/
+    /*********************************************************************************************/
+    /************ fonction pour récuperer et tester les données reçu du formulaire **************/
+    /*******************************************************************************************/
     function postNewWork() {
         let token = sessionStorage.getItem("token");
         const $image = document.getElementById("photo-upload").files[0];
@@ -206,13 +207,12 @@ if (isTokenPresent()) {
     /************ fonction pour vérifier si le formulaire est bien rempli *************/
     /*********************************************************************************/
     function formValidation() {
-   
-        const image = document.getElementById("photo-upload").files[0];
-        const title = document.getElementById("photo-title").value;
-        const categoryId = document.getElementById("photo-category").value;
 
+        const $image = document.getElementById("photo-upload").files[0];
+        const $title = document.getElementById("photo-title").value;
+        const $categoryId = document.getElementById("photo-category").value;
 
-        if (!image || title.trim().length === 0 || categoryId === "") {
+        if (!$image || $title.trim().length === 0 || $categoryId === "") {
             return false;
         } else {
             return true;
@@ -220,15 +220,18 @@ if (isTokenPresent()) {
 
     }
 
-    const testForm = () => {
 
-            formValidation() ? $submitPhoto.removeAttribute("disabled") : $submitPhoto.setAttribute("disabled", "");
-            if (formValidation()) {
-                $submitPhoto.classList.add("submit-photo-active")
-            } else {
-                $submitPhoto.classList.remove("submit-photo-active")
-            }
-        
+    const testForm = () => {
+        formValidation() ? $submitPhoto.removeAttribute("disabled") : $submitPhoto.setAttribute("disabled", "");
+
+        if (formValidation()) {
+            alertTitle.innerText = "Titre"
+            alertCategory.innerText = "Catégories"
+            $submitPhoto.classList.add("submit-photo-active")
+        } else {
+            $submitPhoto.classList.remove("submit-photo-active")
+        }
+
         $title.addEventListener('input', testForm);
         $categories.addEventListener('change', testForm);
         $image.addEventListener('change', testForm);
@@ -251,8 +254,11 @@ if (isTokenPresent()) {
 
     function resetFormFields() {
         previewImage.src = './assets/icons/picture.png'
-        $categories.selectedIndex = 0; 
+        $categories.selectedIndex = 0;
         $title.value = '';
+        alertTitle.innerText = "Titre - Veuillez renseignez ce champ"
+        alertCategory.innerText = "Catégories - Veuillez renseignez ce champ"
+
     }
 
     /***************************************************/

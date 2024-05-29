@@ -4,12 +4,13 @@ const $modall = document.getElementById('modal')
 const $categoryContainer = document.getElementById("photo-category");
 const $containerBtn = document.querySelector('.sort-btn');
 const $gallery = document.querySelector('.gallery');
+const $btnAll = document.getElementById("btn-all");
 
 /*********************************************************************/
 /* fonction pour récuperer la token si générer lors de la connexion */
 /*******************************************************************/
 
-const isTokenPresent = function token() {
+const isTokenPresent = () => {
     return sessionStorage.getItem('token') ? true : false;
 }
 
@@ -83,7 +84,7 @@ function createBtn() {
     }
 }
 
-const $btnAll = document.getElementById("btn-all");
+
 
 $btnAll.addEventListener("click", function () {
     $gallery.innerHTML = "";
@@ -126,7 +127,7 @@ if (isTokenPresent()) {
         sessionStorage.clear();
         window.location.href = "login.html";
     });
-    
+
     const editMode = document.createElement("p");
     const topMenu = document.createElement("div");
     topMenu.className = "topMenu";
