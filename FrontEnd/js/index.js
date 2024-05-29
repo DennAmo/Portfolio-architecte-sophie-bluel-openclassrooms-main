@@ -1,10 +1,10 @@
-let $works
-let $categories
-const $modall = document.getElementById('modal')
-const $categoryContainer = document.getElementById("photo-category");
-const $containerBtn = document.querySelector('.sort-btn');
-const $gallery = document.querySelector('.gallery');
-const $btnAll = document.getElementById("btn-all");
+let works
+let categories
+const modall = document.getElementById('modal')
+const categoryContainer = document.getElementById("photo-category");
+const containerBtn = document.querySelector('.sort-btn');
+const gallery = document.querySelector('.gallery');
+const btnAll = document.getElementById("btn-all");
 
 /*********************************************************************/
 /* fonction pour récuperer la token si générer lors de la connexion */
@@ -21,9 +21,9 @@ const isTokenPresent = () => {
 async function getWorks() {
     try {
         const response = await fetch("http://localhost:5678/api/works");
-        $works = await response.json();
+        works = await response.json();
 
-        createWorks($works);
+        createWorks(works);
         if (isTokenPresent()) {
             createEditedWorks()
         }
@@ -36,9 +36,9 @@ async function getWorks() {
 async function getCategories() {
     try {
         const response = await fetch("http://localhost:5678/api/categories");
-        $categories = await response.json();
+        categories = await response.json();
         createBtn();
-        createCategories($categories)
+        createCategories(categories)
     } catch (error) {
         console.error('Erreur:', error);
     }
@@ -49,22 +49,37 @@ getWorks();
 getCategories();
 
 
+ /******************************************************************************************************************/
+    /********** fonction pour crée les catégories en tant qu'option dans le menu déroulant pour ajouter photo *********/
+    /******************************************************************************************************************/
+    function createCategories(categories) {
+        categories.forEach(function (category, index) {
+            const option = document.createElement("option");
+            option.value = index + 1;
+            option.text = category.name;
+            categoryContainer.appendChild(option);
+            categoryContainer.selectedIndex = 0;
+            categoryContainer.firstChild.textContent = "Sélectionnez une catégorie";
+        });
+    }
+
+
 /**************************************************************/
 /***** fonction pour crée les oeuvres sur page d'accueil *****/
 /************************************************************/
 
-function createWorks($works) {
-    $gallery.innerHTML = "";
-    for (let i = 0; i < $works.length; i++) {
-        const $worksFigure = document.createElement("figure");
-        const $worksImg = document.createElement("img");
-        const $worksText = document.createElement("figcaption");
+function createWorks(works) {
+    gallery.innerHTML = "";
+    for (let i = 0; i < works.length; i++) {
+        const worksFigure = document.createElement("figure");
+        const worksImg = document.createElement("img");
+        const worksText = document.createElement("figcaption");
 
-        $worksImg.src = $works[i].imageUrl;
-        $worksText.textContent = $works[i].title;
-        $worksFigure.appendChild($worksImg);
-        $worksFigure.appendChild($worksText);
-        $gallery.appendChild($worksFigure);
+        worksImg.src = works[i].imageUrl;
+        worksText.textContent = works[i].title;
+        worksFigure.appendChild(worksImg);
+        worksFigure.appendChild(worksText);
+        gallery.appendChild(worksFigure);
     }
 }
 
@@ -73,22 +88,22 @@ function createWorks($works) {
 /************************************************************/
 
 function createBtn() {
-    for (let i = 0; i < $categories.length; i++) {
-        const $button = document.createElement("button");
+    for (let i = 0; i < categories.length; i++) {
+        const button = document.createElement("button");
 
-        $containerBtn.appendChild($button);
-        $button.textContent = $categories[i].name;
-        $button.addEventListener('click', function () {
-            filterWorksByCategory($categories[i].name);
+        containerBtn.appendChild(button);
+        button.textContent = categories[i].name;
+        button.addEventListener('click', function () {
+            filterWorksByCategory(categories[i].name);
         });
     }
 }
 
 
 
-$btnAll.addEventListener("click", function () {
-    $gallery.innerHTML = "";
-    createWorks($works);
+btnAll.addEventListener("click", function () {
+    gallery.innerHTML = "";
+    createWorks(works);
 });
 
 /**************************************************************/
@@ -96,9 +111,9 @@ $btnAll.addEventListener("click", function () {
 /************************************************************/
 
 function filterWorksByCategory(categoryName) {
-    $gallery.innerHTML = "";
-    const $filteredWorks = $works.filter(filterParam => filterParam.category.name === categoryName);
-    createWorks($filteredWorks);
+    gallery.innerHTML = "";
+    const filteredWorks = works.filter(filterParam => filterParam.category.name === categoryName);
+    createWorks(filteredWorks);
 }
 
 /**************************************************************/
@@ -108,34 +123,36 @@ function filterWorksByCategory(categoryName) {
 if (isTokenPresent()) {
 
     const body = document.querySelector("body");
-    const $logBtn = document.querySelector('.log-btn');
-    const $h2 = document.querySelector("#portfolio h2");
+    const logBtn = document.querySelector('.log-btn');
+    const h2 = document.querySelector("#portfolio h2");
 
-    const $editBtn = document.createElement("aside");
+    const editBtn = document.createElement("aside");
 
-    $editBtn.classList.add("edit-button");
-    $editBtn.innerHTML = "<i class='fa-regular fa-pen-to-square'></i> Modifier";
-    $h2.insertAdjacentElement('afterend', $editBtn);
+    editBtn.classList.add("edit-button");
+    editBtn.innerHTML = "<i class='fa-regular fa-pen-to-square'></i> Modifier";
+    h2.insertAdjacentElement('afterend', editBtn);
 
-    $editBtn.addEventListener('click', function () {
+    editBtn.addEventListener('click', function () {
         modal.style.display = 'flex';
     });
 
-    $logBtn.innerHTML = "logout";
+    logBtn.innerHTML = "logout";
 
-    $logBtn.addEventListener('click', function () {
+    logBtn.addEventListener('click', function () {
         sessionStorage.clear();
         window.location.href = "login.html";
     });
 
     const editMode = document.createElement("p");
     const topMenu = document.createElement("div");
+    const topMenuLayout = document.createElement("div")
+    topMenuLayout.className = "topMenu-layout"
     topMenu.className = "topMenu";
     editMode.innerHTML = `<i class="fa-regular fa-pen-to-square"></i>Mode édition`;
 
+    topMenu.appendChild(topMenuLayout)
     body.insertAdjacentElement("afterbegin", topMenu);
-    topMenu.append(editMode);
-    $containerBtn.style.display = "none"
-    $gallery.style.paddingTop = "50px"
+    topMenuLayout.append(editMode);
+    containerBtn.style.display = "none"
 
 }

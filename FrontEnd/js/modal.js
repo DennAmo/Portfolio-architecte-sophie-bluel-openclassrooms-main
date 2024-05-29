@@ -2,26 +2,24 @@
 if (isTokenPresent()) {
 
 
-    const $editedworksLayout = document.querySelector(".editworks-layout")
-    const $addworkBtn = document.querySelector(".addwork-button")
-    const $modalContent = document.querySelector(".modal-content")
-    const $modalAddwork = document.querySelector(".modal-addwork")
-    const $modalPrevious = document.querySelector(".modal-previous")
-    const $submitPhoto = document.querySelector(".submit-photo");
-    const $title = document.getElementById("photo-title");
-    const $categories = document.getElementById("photo-category");
-    const $image = document.getElementById("photo-upload");
+    const editedworksLayout = document.querySelector(".editworks-layout")
+    const addworkBtn = document.querySelector(".addwork-button")
+    const modalContent = document.querySelector(".modal-content")
+    const modalAddwork = document.querySelector(".modal-addwork")
+    const modalPrevious = document.querySelector(".modal-previous")
+    const submitPhoto = document.querySelector(".submit-photo");
+    const title = document.getElementById("photo-title");
+    const categories = document.getElementById("photo-category");
+    const image = document.getElementById("photo-upload");
     const previewImage = document.getElementById('preview-image');
-    const alertTitle = document.querySelector(".phototitle")
-    const alertCategory = document.querySelector(".category-title")
 
     /**************************************************************/
     /********** fonction pour cacher la modal ********************/
     /************************************************************/
     function hideModal() {
-        $modall.style.display = 'none';
-        $modalContent.style.display = "initial"
-        $modalAddwork.style.display = "none"
+        modall.style.display = 'none';
+        modalContent.style.display = "flex"
+        modalAddwork.style.display = "none"
         resetFormFields()
     }
 
@@ -29,7 +27,7 @@ if (isTokenPresent()) {
     /********** fonction pour fermer la modal quand on clique en dehors **********/
     /****************************************************************************/
     window.addEventListener('click', function (event) {
-        if (event.target === $modall) {
+        if (event.target === modall) {
             hideModal()
         }
     });
@@ -58,29 +56,29 @@ if (isTokenPresent()) {
     /*********** fonction pour crée les oeuvres dans la modal d'édition **********/
     /****************************************************************************/
     function createEditedWorks() {
-        $editedworksLayout.innerHTML = "";
+        editedworksLayout.innerHTML = "";
 
-        for (let i = 0; i < $works.length; i++) {
+        for (let i = 0; i < works.length; i++) {
 
-            const $editedworksContainer = document.createElement("div");
-            const $editedworksImg = document.createElement("img");
-            const $trashIcon = document.createElement("i")
-            const $trashContainer = document.createElement("span")
+            const editedworksContainer = document.createElement("div");
+            const editedworksImg = document.createElement("img");
+            const trashIcon = document.createElement("i")
+            const trashContainer = document.createElement("span")
 
-            $trashIcon.classList.add("fa-trash-o")
-            $trashIcon.classList.add("fa")
-            $trashContainer.classList.add("trashicon-container")
-            $editedworksContainer.classList.add("editworks-container")
+            trashIcon.classList.add("fa-trash-o")
+            trashIcon.classList.add("fa")
+            trashContainer.classList.add("trashicon-container")
+            editedworksContainer.classList.add("editworks-container")
 
-            $editedworksImg.src = $works[i].imageUrl;
-            $trashIcon.id = $works[i].id;
+            editedworksImg.src = works[i].imageUrl;
+            trashIcon.id = works[i].id;
 
-            $editedworksLayout.appendChild($editedworksContainer);
-            $editedworksContainer.appendChild($trashIcon)
-            $editedworksContainer.appendChild($editedworksImg);
-            $editedworksContainer.appendChild($trashContainer)
+            editedworksLayout.appendChild(editedworksContainer);
+            editedworksContainer.appendChild(trashIcon)
+            editedworksContainer.appendChild(editedworksImg);
+            editedworksContainer.appendChild(trashContainer)
 
-            $trashIcon.addEventListener("click", (e) => {
+            trashIcon.addEventListener("click", (e) => {
                 e.preventDefault();
                 deleteWork(e.target.id);
             });
@@ -91,39 +89,27 @@ if (isTokenPresent()) {
     /************************************************************************************/
     /********** listener sur le bouton pour ajouter photo et l'icone previous **********/
     /**********************************************************************************/
-    $addworkBtn.addEventListener("click", () => {
-        $modalContent.style.display = "none"
-        $modalAddwork.style.display = "initial"
+    addworkBtn.addEventListener("click", () => {
+        modalContent.style.display = "none"
+        modalAddwork.style.display = "flex"
     })
 
     function getBackInModal() {
-        $modalContent.style.display = "initial"
-        $modalAddwork.style.display = "none"
+        modalContent.style.display = "flex"
+        modalAddwork.style.display = "none"
         resetFormFields()
     }
 
-    $modalPrevious.addEventListener("click", getBackInModal)
+    modalPrevious.addEventListener("click", getBackInModal)
 
-    /******************************************************************************************************************/
-    /********** fonction pour crée les catégories en tant qu'option dans le menu déroulant pour ajouter photo *********/
-    /******************************************************************************************************************/
-    function createCategories(categories) {
-        categories.forEach(function (category, index) {
-            const option = document.createElement("option");
-            option.value = index + 1;
-            option.text = category.name;
-            $categoryContainer.appendChild(option);
-            $categoryContainer.selectedIndex = 0;
-            $categoryContainer.firstChild.textContent = "Sélectionnez une catégorie";
-        });
-    }
+   
 
 
 
     /*********************************************************************/
     /********** fonction pour supprimer une oeuvre + appel api **********/
     /*******************************************************************/
-    function deleteWork(workId,) {
+    function deleteWork(workId) {
         const confirmed = window.confirm("Êtes-vous sûr de vouloir supprimer cette œuvre ?");
 
         if (!confirmed) {
@@ -139,9 +125,9 @@ if (isTokenPresent()) {
         })
             .then(response => {
                 if (response.ok) {
-                    $works = $works.filter(work => parseInt(work.id) !== parseInt(workId));
+                    works = works.filter(work => parseInt(work.id) !== parseInt(workId));
                     createEditedWorks();
-                    createWorks($works);
+                    createWorks(works);
                     alert(`Oeuvre supprimée avec succès`);
                 } else if (response.status === 401) {
                     alert(`Vous n'êtes pas autorisé à supprimer cette œuvre.`);
@@ -160,15 +146,16 @@ if (isTokenPresent()) {
     /**************************************************************/
     /******** listener sur le formulaire d'ajout d'oeuvre ********/
     /************************************************************/
-    $submitPhoto.addEventListener("click", (e) => {
+    submitPhoto.addEventListener("click", (e) => {
         e.preventDefault();
+        formAlert()
         postNewWork();
 
     });
 
     /* preview */
 
-    $image.addEventListener('change', (event) => {
+    image.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -186,19 +173,19 @@ if (isTokenPresent()) {
     /*******************************************************************************************/
     function postNewWork() {
         let token = sessionStorage.getItem("token");
-        const $image = document.getElementById("photo-upload").files[0];
-        const $title = document.getElementById("photo-title").value;
-        const $categoryName = $categories.options[$categories.selectedIndex].innerText;
-        const $categoryId = $categories.options[$categories.selectedIndex].value;
+        const image = document.getElementById("photo-upload").files[0];
+        const title = document.getElementById("photo-title").value;
+        const categoryName = categories.options[categories.selectedIndex].innerText;
+        const categoryId = categories.options[categories.selectedIndex].value;
 
-        let $validity = formValidation($image, $title, $categoryId);
-        if ($validity === true) {
-            const $formData = new FormData();
-            $formData.append("image", $image);
-            $formData.append("title", $title);
-            $formData.append("category", $categoryId);
+        let validity = formValidation(image, title, categoryId);
+        if (validity === true) {
+            const formData = new FormData();
+            formData.append("image", image);
+            formData.append("title", title);
+            formData.append("category", categoryId);
 
-            sendNewData(token, $formData, $title, $categoryName);
+            sendNewData(token, formData, title, categoryName);
         }
 
     };
@@ -206,7 +193,28 @@ if (isTokenPresent()) {
     /***********************************************************************************/
     /************ fonction pour vérifier si le formulaire est bien rempli *************/
     /*********************************************************************************/
-    function formValidation() {
+  
+
+    const formAlert = function() {
+        const image = document.getElementById("photo-upload").files[0];
+        const title = document.getElementById("photo-title").value;
+        const categoryId = document.getElementById("photo-category").value;
+        
+        if (!image){
+          alert("Veuillez ajouter une image");
+     
+        }
+        if (title.trim().length == 0){    
+          alert("Veuillez ajouter un titre");
+    
+        }
+        if (categoryId == ""){
+          alert("Veuillez choisir une catégorie");
+    
+        }
+      }
+
+      function formValidation() {
 
         const $image = document.getElementById("photo-upload").files[0];
         const $title = document.getElementById("photo-title").value;
@@ -219,26 +227,19 @@ if (isTokenPresent()) {
         }
 
     }
-
-
-    const testForm = () => {
-        formValidation() ? $submitPhoto.removeAttribute("disabled") : $submitPhoto.setAttribute("disabled", "");
-
+    
+      const testForm = () => {
+            
         if (formValidation()) {
-            alertTitle.innerText = "Titre"
-            alertCategory.innerText = "Catégories"
-            $submitPhoto.classList.add("submit-photo-active")
+            submitPhoto.classList.add("submit-photo-active")
         } else {
-            $submitPhoto.classList.remove("submit-photo-active")
+            submitPhoto.classList.remove("submit-photo-active")
         }
-
-        $title.addEventListener('input', testForm);
-        $categories.addEventListener('change', testForm);
-        $image.addEventListener('change', testForm);
-
+        title.addEventListener('input', testForm);
+        categories.addEventListener('change', testForm);
+        image.addEventListener('change', testForm);
     }
-    testForm()
-
+testForm()
     /****************************************************************************************************/
     /************ fonction pour ajouté une oeuvre dans le même modèle que celles présentes *************/
     /**************************************************************************************************/
@@ -246,18 +247,17 @@ if (isTokenPresent()) {
         newWork = {};
         newWork.title = data.title;
         newWork.id = data.id;
-        newWork.category = { "id": data.$categoryId, "name": categoryName };
+        newWork.category = { "id": data.categoryId, "name": categoryName };
         newWork.imageUrl = data.imageUrl;
-        $works.push(newWork);
+        works.push(newWork);
     }
 
 
     function resetFormFields() {
         previewImage.src = './assets/icons/picture.png'
-        $categories.selectedIndex = 0;
-        $title.value = '';
-        alertTitle.innerText = "Titre - Veuillez renseignez ce champ"
-        alertCategory.innerText = "Catégories - Veuillez renseignez ce champ"
+        categories.selectedIndex = 0;
+        title.value = '';
+        submitPhoto.classList.remove("submit-photo-active")
 
     }
 
@@ -291,7 +291,7 @@ if (isTokenPresent()) {
                 } else {
                     alert(`Erreur: Les données reçues sont indéfinies ou corrompus.`);
                 }
-                createWorks($works)
+                createWorks(works)
                 createEditedWorks()
                 getBackInModal()
             })

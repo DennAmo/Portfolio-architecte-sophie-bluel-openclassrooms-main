@@ -3,163 +3,84 @@
    License: none (public domain)
 */
 
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video {
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, button {
 	margin: 0;
 	padding: 0;
 	border: 0;
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	color: inherit;
+	text-decoration: inherit;
 }
-
 /* HTML5 display-role reset for older browsers */
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section {
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
 	display: block;
 }
-
 body {
 	line-height: 1;
 }
-
-ol,
-ul {
+ol, ul {
 	list-style: none;
 }
-
-blockquote,
-q {
+blockquote, q {
 	quotes: none;
 }
-
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
+blockquote:before, blockquote:after,
+q:before, q:after {
 	content: '';
 	content: none;
 }
-
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-
 /** end reset css**/
-body {
-	
-	margin: auto;
-	font-family: 'Work Sans';
-	font-size: 14px;
+html {
+	background: #FFFEF8;
 }
 
 main {
-	padding: 230px;
-	padding-top: 0px;
+	min-width: 320px;
 }
 
+body {
+	
+	margin-left: 240px;
+	margin-right: 240px;
+	font-family: 'Work Sans' ;
+	font-size: 14px;
+	position: relative;
+
+	
+}
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 30px 0;
-	padding: 30px;
-	padding-top: 0px;
+	margin: 50px 0
 }
-
 section {
-	margin: 50px 0;
+	margin: 50px 0
 }
+footer {
+display: flex;
+flex-direction: row-reverse;
 
-h1 {
+}
+h1{
 	display: flex;
 	flex-direction: column;
 	font-family: 'Syne';
@@ -167,56 +88,56 @@ h1 {
 	font-weight: 800;
 	color: #B1663C
 }
-
-h1>span {
+h1 > span {
 	font-family: 'Work Sans';
-	font-size: 10px;
+	font-size:10px;
 	letter-spacing: 0.1em;
-	;
 }
-
-h2 {
+h2{
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
 	color: #1D6154
 }
+button, input[type="submit"] {
+	cursor: pointer;
+	height: 39px;
 
+}
+input[type="text"], option, textarea, input[type="email"], #selectCategory {
+	font-family: 'Work Sans';
+	font-size:1em;
+	color: #444444 ;                  
+}
 nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
-
 }
-
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
+	text-decoration: none;
 }
-
 li:hover {
 	color: #B1663C;
 }
-
 #introduction {
 	display: flex;
 	align-items: center;
+	margin-bottom: 5em;
 }
-
 #introduction figure {
 	flex: 1
 }
-
 #introduction img {
 	display: block;
 	margin: auto;
 	width: 80%;
 }
-
 #introduction article {
 	flex: 1
 }
-
 #introduction h2 {
 	margin-bottom: 1em;
 }
@@ -226,14 +147,12 @@ li:hover {
 }
 
 #portfolio {
-	text-align: center;
+	position: relative;
 }
 
+
 #portfolio h2 {
-	display: inline-block;
     padding-Right: 30px;
-	text-align: center;
-	margin-bottom: 1em;
 }
 
 .gallery {
@@ -303,6 +222,19 @@ footer nav ul {
 	margin: 2em
 }
 
+.works-menu {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 45px;
+
+}
+
+.addwork-button {
+	width: 70%;
+	min-width: 160px;
+	align-self: center;
+}
 
 .addwork-button,
 .sort-btn button {
@@ -362,12 +294,18 @@ input[type="text"],
 input[type="password"] {
 	width: 30%;
 	padding: 10px;
+	
 	margin-top: 20px;
 	box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.09);
 	box-sizing: border-box;
-
+    border: none;
+    outline: none;
 	font-family: 'Syne';
 
+}
+
+strong {
+	font-weight: 700;
 }
 
 input[type="submit"] {
@@ -385,6 +323,10 @@ form {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
+}
+
+#add-photo-form {
+	width: 50%;
 }
 
 .login-form {

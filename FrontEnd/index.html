@@ -20,13 +20,15 @@
 	
 </head>
 
+
+
 <body>
 
 	<header>
 		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 		<nav>
 			<ul>
-				<li><a href="index.html#portfolio">projets</a></li>
+				<li><a href="index.html#portfolio"><strong>projets</strong></a></li>
 				<li><a href="index.html#contact">contact</a></li>
 				<li><a class="log-btn" href="login.html">login</a></li>
 				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
@@ -53,8 +55,8 @@
 			</article>
 		</section>
 		<section id="portfolio">
-			<h2>Mes Projets</h2>
-
+			<div class="works-menu"><h2>Mes Projets</h2>
+			</div>
 			<aside id="modal" class="modal">
 				<div class="modal-content">
 					<p>Galerie photo</p>
@@ -80,16 +82,16 @@
 
 
 							<div class="categories-title-layout">
-								<label class="phototitle" for="photo-title">Titre - Veuillez renseignez ce champ</label>
+								<label class="phototitle" for="photo-title" recquired>Titre</label>
 								<input type="text" id="photo-title" name="title" required>
 
-								<label class="category-title" for="photo-category">Catégorie: - Veuillez renseignez ce champ</label>
+								<label class="category-title" for="photo-category">Catégorie:</label>
 								<select id="photo-category" name="category" required>
 									<option value="" disabled selected hidden>Sélectionnez une catégorie</option>
 								</select>
 							</div>
 							<div class="after-line"></div>
-							<button type="submit" class="submit-photo" disabled>Valider</button>
+							<button type="submit" class="submit-photo">Valider</button>
 						</form>
 					</div>
 				</div>
